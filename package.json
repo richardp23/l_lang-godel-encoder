@@ -6,14 +6,28 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:backend": "python -m pytest backend/tests"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^10.2.1",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^17.5.0",
+    "jiti": "^2.6.1",
     "typescript": "~6.0.2",
+    "typescript-eslint": "^8.59.0",
     "vite": "^8.0.10",
     "vitest": "^4.0.4"
+  },
+  "dependencies": {
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
   }
 }
