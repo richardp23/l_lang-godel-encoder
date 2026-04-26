@@ -221,6 +221,12 @@ from pyodide_bridge import __call_api
         </div>
       </header>
 
+      <section className="credits-banner" aria-label="Project credits">
+        <div className="credits-banner-inner">
+          Built by Richard Perez Jr. (UI/website) and Jacob Montufar (backend encoder logic).
+        </div>
+      </section>
+
       <section className="hero" id="top" aria-labelledby="hero-heading">
         <div className="hero-inner">
           <span className="eyebrow eyebrow-on-dark">Theoretical programming · Browser tooling</span>
@@ -476,7 +482,7 @@ from pyodide_bridge import __call_api
       <footer className="footer" aria-label="About this project">
         <div className="footer-inner">
           <p className="footer-line">
-            Inspired by Dr. Ronald Fechter&apos;s classroom L language and the original{" "}
+            Inspired by Dr. Ronald Fechter&apos;s Theory of Computation class, and the original{" "}
             <a
               href="https://anthonyvallejo23.github.io/L-Theoretical-Programming-Language/"
               target="_blank"
@@ -486,7 +492,25 @@ from pyodide_bridge import __call_api
             </a>{" "}
             by Anthony Vallejo.
           </p>
-          <p className="footer-line muted">Vite · TypeScript · React · Pyodide · GitHub Pages.</p>
+
+          <p className="footer-line muted">
+            <a href="https://vite.dev/" target="_blank" rel="noreferrer noopener">
+              Vite
+            </a>{" "}
+            ·{" "}
+            <a href="https://www.typescriptlang.org/" target="_blank" rel="noreferrer noopener">
+              TypeScript
+            </a>{" "}
+            ·{" "}
+            <a href="https://react.dev/" target="_blank" rel="noreferrer noopener">
+              React
+            </a>{" "}
+            · Pyodide ·{" "}
+            <a href="https://docs.github.com/en/pages" target="_blank" rel="noreferrer noopener">
+              GitHub Pages
+            </a>
+            .
+          </p>
         </div>
       </footer>
     </>

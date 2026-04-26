@@ -250,6 +250,21 @@ code {
   background: var(--error);
 }
 
+/* ---------- Credits banner ---------- */
+.credits-banner {
+  background: var(--bg-subtle);
+  border-bottom: 1px solid var(--border);
+}
+
+.credits-banner-inner {
+  max-width: var(--max-content);
+  margin: 0 auto;
+  padding: 8px 24px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-helper);
+}
+
 @keyframes pulse {
   0%,
   100% {
@@ -283,7 +298,7 @@ code {
 .hero-inner {
   max-width: var(--max-content);
   margin: 0 auto;
-  padding: 44px 24px 52px;
+  padding: 28px 24px 32px;
 }
 
 .eyebrow {
@@ -294,7 +309,7 @@ code {
   letter-spacing: 1.3px;
   text-transform: uppercase;
   color: var(--text-helper);
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .eyebrow-on-dark {
@@ -303,12 +318,12 @@ code {
 
 .hero-title {
   font-family: var(--font-display);
-  font-size: clamp(32px, 4.6vw, 56px);
+  font-size: clamp(30px, 4vw, 46px);
   font-weight: 600;
   line-height: 1.15;
   letter-spacing: -0.4px;
   font-feature-settings: "kern" on;
-  margin: 0 0 16px;
+  margin: 0 0 12px;
   max-width: 24ch;
   color: var(--text-on-dark);
 }
@@ -325,7 +340,7 @@ code {
   line-height: 1.55;
   color: var(--text-on-dark-muted);
   max-width: 62ch;
-  margin: 0 0 22px;
+  margin: 0 0 16px;
 }
 
 .hero-meta {
@@ -343,7 +358,7 @@ code {
   font-weight: 600;
   letter-spacing: 1.1px;
   text-transform: uppercase;
-  padding: 6px 10px;
+  padding: 5px 9px;
   border: 1px solid var(--border-on-dark);
   border-radius: var(--radius-lg);
   color: var(--text-on-dark-muted);
@@ -680,8 +695,13 @@ textarea {
     display: none;
   }
 
+  .credits-banner-inner {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+
   .hero-inner {
-    padding: 36px 20px 44px;
+    padding: 24px 20px 28px;
   }
 
   .content {
