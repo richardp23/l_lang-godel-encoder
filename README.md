@@ -27,7 +27,7 @@ The UI loads and executes `backend/encoder.py` directly (without editing that fi
 - [Vite](https://vite.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [React](https://react.dev/)
-- Pyodide
+- [Pyodide](https://pyodide.org/)
 - [GitHub Pages](https://docs.github.com/en/pages)
 
 ### Architecture Breakdown

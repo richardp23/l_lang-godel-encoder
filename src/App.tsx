@@ -27,6 +27,7 @@ function App() {
   const [statusMessage, setStatusMessage] = useState("Loading Pyodide runtime...");
   const [statusKind, setStatusKind] = useState<StatusKind>("loading");
   const [callApi, setCallApi] = useState<((name: string, payloadJson: string) => string) | null>(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const [singleLine, setSingleLine] = useState("");
   const [singleShowMath, setSingleShowMath] = useState(false);
@@ -43,6 +44,26 @@ function App() {
   const [decodeNumber, setDecodeNumber] = useState("");
   const [decodeNumberShowMath, setDecodeNumberShowMath] = useState(false);
   const [decodeNumberOutput, setDecodeNumberOutput] = useState("");
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem("godelDarkMode");
+      if (saved !== null) {
+        setIsDarkMode(saved === "true");
+      }
+    } catch {
+      // localStorage can fail in locked-down environments.
+    }
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark-mode", isDarkMode);
+    try {
+      window.localStorage.setItem("godelDarkMode", String(isDarkMode));
+    } catch {
+      // Ignore storage write failures.
+    }
+  }, [isDarkMode]);
 
   useEffect(() => {
     let cancelled = false;
@@ -214,10 +235,26 @@ from pyodide_bridge import __call_api
               <span className="brand-sub">Encoder &amp; Decoder</span>
             </span>
           </a>
-          <p id="runtime-status" className={`status ${statusKind}`} role="status" aria-live="polite">
-            <span className="status-dot" aria-hidden="true"></span>
-            <span className="status-text">{statusMessage}</span>
-          </p>
+          <div className="topbar-controls">
+            <button
+              type="button"
+              className="dark-mode-toggle"
+              aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+              title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+              data-active={isDarkMode ? "true" : "false"}
+              onClick={() => setIsDarkMode((prev) => !prev)}
+            >
+              <span className="dark-mode-label">{isDarkMode ? "Dark mode" : "Light mode"}</span>
+              <span className="dark-mode-icon" aria-hidden="true">
+                ◐
+              </span>
+              <span className="toggle-slider" aria-hidden="true"></span>
+            </button>
+            <p id="runtime-status" className={`status ${statusKind}`} role="status" aria-live="polite">
+              <span className="status-dot" aria-hidden="true"></span>
+              <span className="status-text">{statusMessage}</span>
+            </p>
+          </div>
         </div>
       </header>
 
@@ -505,7 +542,11 @@ from pyodide_bridge import __call_api
             <a href="https://react.dev/" target="_blank" rel="noreferrer noopener">
               React
             </a>{" "}
-            · Pyodide ·{" "}
+            ·{" "}
+            <a href="https://pyodide.org/" target="_blank" rel="noreferrer noopener">
+              Pyodide
+            </a>{" "}
+            ·{" "}
             <a href="https://docs.github.com/en/pages" target="_blank" rel="noreferrer noopener">
               GitHub Pages
             </a>
