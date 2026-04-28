@@ -253,7 +253,15 @@ from pyodide_bridge import __call_api
 
       <section className="credits-banner" aria-label="Project credits">
         <div className="credits-banner-inner">
-          Built by Richard Perez Jr. (UI/website) and Jacob Montufar (backend encoder logic).
+          Built by Richard Perez Jr. (UI/website) and Jacob Montufar (backend encoder logic).{" "}
+          <a
+            href="https://github.com/richardp23/l_lang-godel-encoder"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            View Repository on GitHub
+          </a>
+          .
         </div>
       </section>
 
@@ -524,6 +532,14 @@ from pyodide_bridge import __call_api
           </p>
 
           <p className="footer-line muted">
+            <a
+              href="https://github.com/richardp23/l_lang-godel-encoder"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              Repository
+            </a>{" "}
+            ·{" "}
             <a href="https://vite.dev/" target="_blank" rel="noreferrer noopener">
               Vite
             </a>{" "}
