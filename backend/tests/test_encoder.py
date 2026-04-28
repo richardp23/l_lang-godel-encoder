@@ -39,8 +39,11 @@ def test_label_and_variable_helpers_roundtrip_expected_forms():
     assert parse_var("Y") == 0
     assert parse_var("X1") == 1
     assert parse_var("Z2") == 4
+    assert parse_var("X") == 1
     assert l_var(0) == "Y"
-    assert l_var(1) == "X1"
+    assert l_var(1) == "X"
+    assert l_var(2) == "Z"
+    assert l_var(3) == "X2"
     assert l_var(4) == "Z2"
 
 
@@ -72,5 +75,13 @@ def test_calc_decodes_back_to_instruction_components():
     a, d, b, c = ns["calc"](45, work)
     assert (a, d, b, c) == (1, 11, 2, 1)
     instruction = ns["L_lbl"](a) + ns["L_ins"](b, ns["L_var"](c))
-    assert instruction == "[A] X1<-X1-1"
+    assert instruction == "[A] X <- X - 1"
     assert any("2^A(2D+1)" in line for line in work)
+
+
+def test_parser_accepts_both_compact_and_spaced_instruction_styles():
+    ns = load_encoder_namespace()
+    encode = ns["encode_instruction"]
+    assert encode("Y<-Y+1") == encode("y <- y + 1")
+    assert encode("[A] X1<-X1-1") == encode("[a] x <- x - 1")
+    assert encode("IF Z2=/=0 GOTO [B1]") == encode("if z2 =/= 0 goto [b1]")

@@ -18,9 +18,6 @@ declare global {
   }
 }
 
-const MAX_PROGRAM_LINES = 200;
-const MAX_DECODE_X = 100_000_000;
-
 type StatusKind = "loading" | "ready" | "error";
 
 function App() {
@@ -83,7 +80,11 @@ function App() {
         if (!bridgeSource.includes("def __call_api")) {
           throw new Error("backend/pyodide_bridge.py did not contain expected API definitions.");
         }
-        pyodide.globals.set("ENCODER_SOURCE", encoderSource);
+        const encoderCliMarker = "# --- Main Infinite Loop ---";
+        const encoderPrelude = encoderSource.includes(encoderCliMarker)
+          ? encoderSource.split(encoderCliMarker, 1)[0]
+          : encoderSource;
+        pyodide.globals.set("ENCODER_SOURCE", encoderPrelude);
         pyodide.globals.set("BRIDGE_SOURCE", bridgeSource);
         await pyodide.runPythonAsync(`
 import types, sys
@@ -164,10 +165,6 @@ from pyodide_bridge import __call_api
       setProgramOutput("Enter at least one program line.");
       return;
     }
-    if (lines.length > MAX_PROGRAM_LINES) {
-      setProgramOutput(`Too many lines. Max supported lines: ${MAX_PROGRAM_LINES}.`);
-      return;
-    }
     await runAction(
       "encode_program_lines",
       { lines, include_product: programIncludeProduct },
@@ -203,10 +200,6 @@ from pyodide_bridge import __call_api
     const x = Number.parseInt(raw, 10);
     if (Number.isNaN(x) || x < 0) {
       setDecodeNumberOutput("x must be a non-negative integer.");
-      return;
-    }
-    if (x > MAX_DECODE_X) {
-      setDecodeNumberOutput(`x is too large for browser decode. Maximum: ${MAX_DECODE_X}.`);
       return;
     }
     await runAction(
@@ -304,8 +297,8 @@ from pyodide_bridge import __call_api
                 Encode one line.
               </h3>
               <p className="card-lede">
-                Examples: <code>Y&lt;-Y+1</code>, <code>[A] X1&lt;-X1-1</code>,{" "}
-                <code>IF Z2=/=0 GOTO [B1]</code>.
+                Examples: <code>Y &lt;- Y + 1</code>, <code>[A] X &lt;- X - 1</code>,{" "}
+                <code>IF Z =/= 0 GOTO [B1]</code>.
               </p>
 
               <div className="field">
@@ -316,7 +309,7 @@ from pyodide_bridge import __call_api
                   autoComplete="off"
                   autoCapitalize="off"
                   spellCheck={false}
-                  placeholder="[A] X1<-X1-1"
+                  placeholder="[A] X <- X - 1"
                   value={singleLine}
                   onChange={(event) => setSingleLine(event.target.value)}
                 />
@@ -367,7 +360,7 @@ from pyodide_bridge import __call_api
                   autoComplete="off"
                   autoCapitalize="off"
                   spellCheck={false}
-                  placeholder={"Y<-Y+1\n[A] X1<-X1-1"}
+                  placeholder={"Y <- Y + 1\n[A] X <- X - 1"}
                   value={programLines}
                   onChange={(event) => setProgramLines(event.target.value)}
                 ></textarea>

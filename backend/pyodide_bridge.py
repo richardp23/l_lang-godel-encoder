@@ -1,8 +1,26 @@
 import json
+import time
 import encoder_module
 
-MAX_PROGRAM_LINES = 200
-MAX_DECODE_INPUT = 10**8
+def _parse_non_negative_int(value, field_name):
+    if isinstance(value, bool):
+        raise ValueError(f"{field_name} must be a non-negative integer.")
+
+    if isinstance(value, int):
+        parsed = value
+    elif isinstance(value, str):
+        text = value.strip()
+        if not text:
+            raise ValueError(f"{field_name} must be a non-negative integer.")
+        if not text.isdigit():
+            raise ValueError(f"{field_name} must be a non-negative integer.")
+        parsed = int(text)
+    else:
+        raise ValueError(f"{field_name} must be a non-negative integer.")
+
+    if parsed < 0:
+        raise ValueError(f"{field_name} must be a non-negative integer.")
+    return parsed
 
 
 def _prime_list(n):
@@ -40,8 +58,6 @@ def encode_instruction_line(line, show_math=False):
 def encode_program_lines(lines, include_product=False):
     if not lines:
         raise ValueError("Program must contain at least one instruction.")
-    if len(lines) > MAX_PROGRAM_LINES:
-        raise ValueError(f"Program too large. Max lines: {MAX_PROGRAM_LINES}.")
 
     primes = _prime_list(len(lines))
     compiled = []
@@ -100,12 +116,17 @@ def decode_exponents(values, show_math=False):
     }
 
 
-def decode_program_number(x, show_math=False):
-    original = int(x)
-    if original < 0:
-        raise ValueError("x must be non-negative.")
-    if original > MAX_DECODE_INPUT:
-        raise ValueError(f"x is too large for browser decode. Max supported x: {MAX_DECODE_INPUT}.")
+def decode_program_number(x, show_math=False, max_seconds=None):
+    original = _parse_non_negative_int(x, "x")
+    if max_seconds is not None:
+        max_seconds = float(max_seconds)
+        if max_seconds <= 0:
+            raise ValueError("max_seconds must be greater than zero.")
+    deadline = time.monotonic() + max_seconds if max_seconds is not None else None
+
+    def check_timeout():
+        if deadline is not None and time.monotonic() > deadline:
+            raise TimeoutError(f"Decode exceeded time limit ({max_seconds:g}s).")
 
     adjusted = original + 1 if original % 2 != 0 else original
     n = adjusted
@@ -114,6 +135,7 @@ def decode_program_number(x, show_math=False):
     factor_steps = []
     math_steps = []
     while n > 1:
+        check_timeout()
         if n % div == 0:
             factor_steps.append(f"{n} / {div} = {n // div}")
             n //= div
@@ -127,6 +149,7 @@ def decode_program_number(x, show_math=False):
         max_p = max(counts.keys())
         p = 2
         while p <= max_p:
+            check_timeout()
             if encoder_module.is_prime(p):
                 c_val = counts.get(p, 0)
                 local_work = []
@@ -149,8 +172,8 @@ def decode_program_number(x, show_math=False):
                     math_steps.extend(local_work)
             p += 1
     out = {
-        "input_x": original,
-        "adjusted_x": adjusted,
+        "input_x": str(original),
+        "adjusted_x": str(adjusted),
         "decoded_count": len(lines),
         "instructions": lines,
         "decoded": decoded,
